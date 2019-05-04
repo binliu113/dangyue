@@ -18,22 +18,23 @@
                     <img src="../assets/img/menu3.png" alt="" class="my-img">
                     <div class="btn-box">
                         <a href="javascript:;">
-                            <span class="lbtn">注销</span>
+                            <span class="lbtn" @click="removeLogin">注销</span>
                         </a>
                     </div>
                 </div>
+                <!-- 用户信息 -->
                 <div class="details-user">
-                    <h4 class="user-name">会游泳的鱼</h4>
-                    <p class="user-title">当悦号：15389415660</p>
+                    <h4 class="user-name" v-text="user.user_name"></h4>
+                    <p class="user-title">当悦号：{{user.phone}}</p>
                 </div>
                 <div class="icon-box">
-                    <p>这个人很懒什么都没留下</p>
+                    <p v-text="user.signature">这个人很懒什么都没留下</p>
                     <span class="icon-item">西安</span>
                     <span class="icon-item">小哥哥</span>
                     <span class="icon-item">喜欢女,爱好女</span>
                 </div>
                 <div class="group">
-                    <span class="group-item"><strong>0</strong>获赞</span>
+                    <span class="group-item"><strong v-text="count">0</strong>获赞</span>
                     <span class="group-item"><strong>7</strong>关注</span>
                     <span class="group-item"><strong>4</strong>粉丝</span>
                 </div>
@@ -49,14 +50,15 @@
             <div class="list-content">
                 <div class="list-works" v-if="navCode">
                     <div class="works-list">
-                        <div class="works-item" v-for="item of num">
+                        <!-- 作品类表 -->
+                        <div class="works-item" v-for="item of list"> 
                             <router-link to="" class="works-link">
-                                <video src="https://nie.v.netease.com/r/video/20170928/d3afc120-48a8-4b35-922d-6109b42e8657.mp4" class="link-icon">
+                                <video :src="item.src" class="link-icon">
                                 </video>
                             </router-link>
                             <div class="works-icon">
                                 <span class="mui-icon-extra mui-icon-extra-heart-filled"></span>
-                                <span>130 赞</span>
+                                <span>1赞</span>
                             </div>
                         </div>
                     </div>
@@ -73,15 +75,90 @@
 export default {
     data(){
         return{
-            loginCode: false,  //登录控制
-            navCode: true,   //navbar控制
-            num:10,
-            uname:'',
-            upwd:''
+            loginCode: false,       //登录控制
+            navCode: true,      //navbar控制
+            uname:'',       //input
+            upwd:'',       //input
+            code:1,      //页面实际监控session-控制
+            num:0,
+            user:{},
+            count:0,
+            list:[]
         }
     },
+    created(){
+        this.setTime();
+        // this.loadDetail();
+    },
+    updated(){
+        this.loadDetail();
+    },
+   watch:{
+       //实时监听登录状态
+       code(){
+            var s = sessionStorage.getItem('uid');
+            if(!s){
+                this.loginCode = false;
+            }else{
+                this.loginCode = true;
+            }
+       }
+   },
     methods:{
+        //请求个人详情
+        loadDetail(){
+            if(this.loginCode){
+                this.num+=1;
+                if(this.num<2){
+                    var url = this.host+'user/details';
+                    this.axios.get(url,{
+                        params:{
+                            uid:sessionStorage.getItem('uid')
+                        }
+                    }).then(res=>{
+                        // console.log(res.data);
+                        this.user = res.data.user;
+                        this.count = res.data.count;
+                        this.list = res.data.data;
+                        console.log(this.list,this.num);
+                    })
+                }
+                
+            }
+        },
+        //监听登录状态控制
+        setTime(){
+            setInterval(() => {
+                if(this.code < 0){
+                    this.code++;
+                }else{
+                    this.code--;
+                }
+            }, 1);
+        },
+        //注销登录
+        removeLogin(){
+            sessionStorage.removeItem('uid');
+            var url = this.host+'user/logout';
+            console.log(url);
+            this.axios.get(url,{
+                params:{}
+            }).then((res)=>{
+                console.log(res);
+            })
+        },
+        //登录
         loadLogin(){
+            var nreg = /^\w{3,8}$/
+            if(!nreg.test(this.uname)){
+                this.$toast('用户名格式不正确');
+                return;
+            }
+            var preg = /^\d{3,8}$/
+            if(!preg.test(this.upwd)){
+                this.$toast('密码格式不正确')
+                return;
+            }
             var url = this.host+'user/login';
             this.axios.get(url,{
                 params:{
@@ -90,18 +167,16 @@ export default {
                 }
             }).then(res=>{
                 var code = res.data.code;
-                var user = res.data.user;
-                console.log(user);
                 if(code!=-1){
-                    sessionStorage.setItem('user',user[0]);
-                    var s = sessionStorage.getItem('user');
-                    console.log(s);
-                    this.loginCode = true;
+                    this.$toast('登录成功');
+                    var $uid = res.data.data[0].uid;
+                    sessionStorage.setItem('uid',$uid);
                 }else{
-                    this.loginCode = false;
+                    this.$toast('用户名与密码不匹配');
                 }
             })
         },
+        //登录状态控制
         showWorks(){
             this.navCode = true;
         },
@@ -151,7 +226,7 @@ export default {
     color: #fff;
     background: rgba(102,102,102,.5);
     border-radius: .2rem;
-    padding: .5rem 1.5rem;
+    padding: .3rem .7rem;
 }
 .app-myself .my-details .details-user{
     border-bottom: .05rem solid rgba(102,102,102,.5);
@@ -220,6 +295,7 @@ export default {
 }
 .list-content .works-list .works-icon{
     color: #fff;
+    font-size: 16px;
     z-index: 1;
     position: absolute;
     left: .5rem;
