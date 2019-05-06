@@ -24,13 +24,13 @@
                 <my-home></my-home>
             </div>
             <div class="tabbar-heed" v-if="type===2">
-                <h1>这是关注页</h1>
+                <my-friend></my-friend>
             </div>
             <div class="tabbar-message" v-if="type===3">
-                <h1>这是消息页</h1>
+                <my-message></my-message>
             </div>
             <div class="tabbar-myself" v-if="type===4">
-                <h1>我的页面</h1>
+                <my-myself></my-myself>
             </div>
         </div>
     </div>
@@ -38,6 +38,9 @@
 
 <script>
 import myHome from '@/components/Home.vue'
+import myFriend from '@/components/Friend.vue'
+import myMessage from '@/components/Message.vue'
+import myMyself from '@/components/Myself.vue'
 export default {
     data(){
         return{
@@ -60,7 +63,10 @@ export default {
         }
     },
     components:{
-        myHome
+        myHome,
+        myFriend,
+        myMessage,
+        myMyself
     }
 }
 </script>
