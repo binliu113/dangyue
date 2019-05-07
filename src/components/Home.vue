@@ -59,6 +59,7 @@ export default{
 .app-home .mui-title{color:#fff;}
 .app-home .mui-table-view{
     padding-top:2rem;
+    border: 0;
 }
 .app-home .mui-table-view{
     background:transparent;

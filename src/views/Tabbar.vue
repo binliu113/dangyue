@@ -2,7 +2,7 @@
     <div class="app-tabbar">
         <nav class="tabbar">
             <ul class="tabbar-bar">
-                <li class="tabbar-item" @click="loadHome" :class="type==1 ? 'active' : ' ' ">
+                <li class="tabbar-item" @click="loadHome" :class="type==1 || !type ? 'active' : ' ' ">
                     <span>首页</span>
                 </li>
                 <li class="tabbar-item" @click="loadHeed" :class="type==2 ? 'active' : ' ' ">
@@ -20,16 +20,16 @@
             </ul>
         </nav>
         <div class="tabbar-content">
-            <div class="tabbar-home" v-if="type===1">
+            <div class="tabbar-home" v-if="type==1 || !type">
                 <my-home></my-home>
             </div>
-            <div class="tabbar-heed" v-if="type===2">
+            <div class="tabbar-heed" v-if="type==2">
                 <my-friend></my-friend>
             </div>
-            <div class="tabbar-message" v-if="type===3">
+            <div class="tabbar-message" v-if="type==3">
                 <my-message></my-message>
             </div>
-            <div class="tabbar-myself" v-if="type===4">
+            <div class="tabbar-myself" v-if="type==4">
                 <my-myself></my-myself>
             </div>
         </div>
@@ -44,22 +44,25 @@ import myMyself from '@/components/Myself.vue'
 export default {
     data(){
         return{
-            type:1
+            type:sessionStorage.getItem('tabbarCode')
         }
     },
     methods:{
         loadMyself(){
-            this.type=4
-
+           sessionStorage.setItem('tabbarCode',4);
+            this.type=  sessionStorage.getItem('tabbarCode')
         },
         loadMessage(){
-            this.type=3
+            sessionStorage.setItem('tabbarCode',3);
+            this.type=  sessionStorage.getItem('tabbarCode')
         },
         loadHeed(){
-            this.type=2
+           sessionStorage.setItem('tabbarCode',2);
+            this.type=  sessionStorage.getItem('tabbarCode')
         },
         loadHome(){
-            this.type=1
+            sessionStorage.setItem('tabbarCode',1);
+            this.type=  sessionStorage.getItem('tabbarCode')
         }
     },
     components:{

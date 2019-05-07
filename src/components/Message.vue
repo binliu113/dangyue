@@ -39,7 +39,7 @@
                         <h4 class="item-name">官方助手</h4>
                     </div>
                 </div>
-                <div class="m-chat">
+                <div class="m-chat" @click="jumpChat">
                     <div class="img-box">
                         <img src="icon-img/10.png" alt="" class="chat-img">
                     </div>
@@ -57,6 +57,13 @@ export default{
     data(){
         return{
 
+        }
+    },
+    methods:{
+        jumpChat(){
+            var s = sessionStorage.getItem('uid');
+            if(!s) return this.$toast('不登录还想撩小姐姐/小哥哥'); 
+            this.$router.push('/chatroom')
         }
     }
 }

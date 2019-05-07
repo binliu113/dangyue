@@ -7,15 +7,15 @@
         <div class="chat-body">
             <div class="chat-box" v-for="(item,i) of msgArr">
                 <ul class="chat-user">
-                    <li class="user-img-box">
-                        <img src="icon-img/QQ.jpg" alt="" class="user-img">
+                    <li class="user-img-box" :class="item.user_img==user_img? 'right' : 'left' ">
+                        <img :src="item.user_img" alt="" class="user-img">
                     </li>
-                    <li class="user-name">
-                        <h4>用户名</h4>
+                    <li class="user-name" :class="item.user_img==user_img? 'right' : 'left' ">
+                        <h4 v-text="item.user_name">用户名</h4>
                     </li>
                 </ul>
                 <div class="chat-content">
-                    <div class="content-msg" v-text="item">吃饭、睡觉打豆豆瘦瘦高高规划设计开会时国际化是对方可根据</div>
+                    <div class="content-msg" v-text="item.msg">吃饭、睡觉打豆豆瘦瘦高高规划设计开会时国际化是对方可根据</div>
                 </div>
             </div>
         </div>
@@ -39,7 +39,9 @@ export default{
             msg:'',
             msgArr:[],
             socket:null,
-            arr:''
+            arr:'',
+            user_name:sessionStorage.getItem('user_name'),
+            user_img:sessionStorage.getItem('user_img')
         }
     },
     created(){
@@ -54,15 +56,16 @@ export default{
             this.socket.close();
         },
         sendData(){
-            this.socket.send(this.msg);
+            var msg = this.msg+","+this.user_name+','+this.user_img;
+            this.socket.send(msg);
             this.msg="";
         },
         acceptData(){  //接受数据
             var str='';
             this.socket = new WebSocket(`${this.ws}`);
             this.socket.onmessage = (e)=>{
-                this.arr = JSON.parse(e.data).data;//获取服务器发来的数据
-                this.msgArr.push(this.arr);
+                this.obj = JSON.parse(e.data);//获取服务器发来的数据,并且转换为对象
+                this.msgArr.push(this.obj); //将单条记录的对象push进数组
             }
         }
     }
@@ -84,7 +87,8 @@ export default{
     padding-right:1rem;
 }
 .app-chatroom .chat-body .chat-box{
-    margin-bottom: .5rem;
+    padding-top:1rem;
+    margin-bottom: 1rem;
 }
 .app-chatroom .chat-body .chat-box::after{
     content: " ";
@@ -98,28 +102,45 @@ export default{
     margin: 0;
     display: flex;
     vertical-align: top;
+    position: relative;
 }
 .app-chatroom .chat-user .user-img-box{
     width: 2.5rem;
     height: 2.5rem;
+    position: absolute;
+}
+.app-chatroom .chat-user li.user-name{
+    position: absolute;
+}
+.app-chatroom .chat-user li.user-img-box.right{
+    right: 0rem;
+}
+.app-chatroom .chat-user li.user-name.right{
+    right: .5rem;
+    top:-1.4rem;
+}
+.app-chatroom .chat-user li.user-img-box.left{
+    left: 0rem;
+}
+.app-chatroom .chat-user li.user-name.left{
+    left: .5rem;
+    top:-1.4rem;
 }
 .app-chatroom .chat-user .user-img-box .user-img{
     width:100%;
     border-radius: .5rem;
 }
-.app-chatroom .chat-user .user-name>h4{
-    color: #fff;
-    font-size:17px;
-    margin-top: 0rem;
-    margin-left: .5rem;
+.app-chatroom .chat-user .user-name h4{
+    color: #999;
+    font-size:16px;
 }
 .app-chatroom .chat-body .chat-content{
-    color: #fff;
+    color: #000;
     padding: 0rem 3rem;
 }
 .app-chatroom .chat-body .chat-content .content-msg{
     padding:.7rem;
-    background: #34d134d4;
+    background: #fff;
     border-radius: .2rem;
 }
 .app-chatroom .send-box{
@@ -142,7 +163,8 @@ export default{
     height: 2.2rem;
     margin: 0;
     padding: .3rem;
-    background-color: rgba(255,255,255,.9);
+    color: #000;
+    background-color: #fff;
 }
 .app-chatroom .send-box .send-parent .btn-box{
     width: 20%;

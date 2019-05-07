@@ -16,7 +16,7 @@
             </div>
             <div class="my-details">
                 <div class="img-box">
-                    <img src="../assets/img/menu3.png" alt="" class="my-img">
+                    <img :src="user.user_img" alt="" class="my-img">
                     <div class="btn-box">
                         <a href="javascript:;">
                             <span class="lbtn" @click="removeLogin">注销</span>
@@ -59,7 +59,7 @@
                             </router-link>
                             <div class="works-icon">
                                 <span class="mui-icon-extra mui-icon-extra-heart-filled"></span>
-                                <span>1赞</span>
+                                <span>{{item.like_num}}赞</span>
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,10 @@ export default {
                             uid:sessionStorage.getItem('uid')
                         }
                     }).then(res=>{
-                        // console.log(res.data);
+                        var user = res.data.user;
+                        sessionStorage.setItem('user_name',user.user_name);
+                        sessionStorage.setItem('user_img',user.user_img);
+                        console.log(sessionStorage.getItem('user_name'))
                         this.user = res.data.user;
                         this.count = res.data.count;
                         this.list = res.data.data;
@@ -312,7 +315,6 @@ export default {
 .list-content .works-list .works-icon{
     color: #fff;
     font-size: 16px;
-    z-index: 1;
     position: absolute;
     left: .5rem;
     bottom: .5rem;
