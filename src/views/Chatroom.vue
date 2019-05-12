@@ -128,6 +128,7 @@ export default{
 }
 .app-chatroom .chat-user .user-img-box .user-img{
     width:100%;
+    height: 100%;
     border-radius: .5rem;
 }
 .app-chatroom .chat-user .user-name h4{

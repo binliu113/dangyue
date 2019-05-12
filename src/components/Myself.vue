@@ -10,6 +10,13 @@
                 <input type="button" value="登录" @click="loadLogin" class="login-btn">
             </form>
         </div>
+        <!-- 加载提示 -->
+        <div class="Toast" v-if="tCode" :style="tostStyle">
+            <div class="toast-box">
+                <span class="mui-spinner"></span>
+                <p>正在加载中..</p>
+            </div>
+        </div>
         <div v-if="loginCode" class="login-show">
             <div class="bg-box">
                 <img src="../img/1.jpg" alt="" class="bg-img">
@@ -49,7 +56,7 @@
                 </ul>
             </div>
             <div class="list-content">
-                <div class="list-works" v-if="navCode">
+                <div class="list-works" v-show="navCode">
                     <div class="works-list">
                         <!-- 作品类表 -->
                         <div class="works-item" v-for="item of list">
@@ -64,7 +71,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="list-keep" v-if="!navCode">
+                <div class="list-keep" v-show="!navCode">
                     text2
                 </div>
             </div>
@@ -76,6 +83,7 @@
 export default {
     data(){
         return{
+            tCode: false,
             loginCode: false,       //登录控制
             navCode: true,      //navbar控制
             uname:'',       //input
@@ -84,12 +92,15 @@ export default {
             num:0,
             user:{},
             count:0,
-            list:[]
+            list:[],
+            tostStyle:{
+                //加载提示
+                height: document.documentElement.clientHeight+'px'
+            }
         }
     },
     created(){
         this.setTime();
-        // this.loadDetail();
     },
     updated(){
         this.loadDetail();
@@ -120,11 +131,12 @@ export default {
                         var user = res.data.user;
                         sessionStorage.setItem('user_name',user.user_name);
                         sessionStorage.setItem('user_img',user.user_img);
-                        console.log(sessionStorage.getItem('user_name'))
                         this.user = res.data.user;
                         this.count = res.data.count;
                         this.list = res.data.data;
+                        this.tCode = false;
                     })
+
                 }
 
             }
@@ -141,9 +153,11 @@ export default {
         },
         //注销登录
         removeLogin(){
+            history.go(0)
             sessionStorage.removeItem('uid');
+            sessionStorage.removeItem('user_name');
+            sessionStorage.removeItem('user_img');
             var url = this.host+'user/logout';
-            console.log(url);
             this.axios.get(url,{
                 params:{}
             }).then((res)=>{
@@ -152,11 +166,12 @@ export default {
         },
         //登录
         loadLogin(){
-            var nreg = /^\w{3,8}$/
-            if(!nreg.test(this.uname)){
-                this.$toast('用户名格式不正确');
-                return;
-            }
+            this.tCode = true;
+            //var nreg = /^\d{3,8}$/
+            // if(!nreg.test(this.uname)){
+            //     this.$toast('用户名格式不正确');
+            //     return;
+            // }
             var preg = /^\d{3,8}$/
             if(!preg.test(this.upwd)){
                 this.$toast('密码格式不正确')
@@ -191,6 +206,26 @@ export default {
 </script>
 
 <style lang="css" scoped>
+/* 提示样式 */
+.app-myself .Toast{
+    width: 100%;
+    text-align: center;
+    background-image: linear-gradient(91deg, rgb(2, 0, 49) 0px, rgb(109, 51, 83) 140%);
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+    position: fixed;
+    top: 0;
+}
+.app-myself .toast-box{
+    padding-top: 1rem;
+    margin: 0 auto;
+    width: 10rem;
+    background: rgba(0, 0, 0, .5);
+    border-radius: .5rem;
+    display: inline-block;
+}
+/* 主样式 */
 .app-myself .login-hide{
     padding: 10rem 1rem;
     text-align: center;
@@ -319,5 +354,4 @@ export default {
     left: .5rem;
     bottom: .5rem;
 }
-
 </style>

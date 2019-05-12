@@ -13,7 +13,7 @@
                 <ul class="list-content">
                     <li class="list-item" v-for="(cell,i) of listFriend" :key="i">
                         <div class="img-box">
-                            <img src="../img/yhm.png" :src="cell.fpic" alt="" class="item-img">
+                            <img src="../img/yhm.png" :src="host+cell.fpic" alt="" class="item-img">
                         </div>
                         <div class="item-content">
                             <h4 class="fontColor" v-text="cell.fname"></h4>
@@ -68,7 +68,7 @@
                     <ul class="list-content">
                         <li class="list-item" v-for="(cell,i) of listSearch" :key="i">
                             <div class="img-box">
-                                <img src="../img/yhm.png" :src="cell.user_img" alt="" class="item-img">
+                                <img src="../img/yhm.png" :src="host+cell.user_img" alt="" class="item-img">
                             </div>
                             <div class="item-content">
                                 <h4 class="fontColor" v-text="cell.user_name"></h4>
@@ -87,6 +87,7 @@
 export default {
     data(){
         return{
+            host: this.host,
             nav:1,
             listFriend:[],
             code:false,
@@ -94,6 +95,9 @@ export default {
             hiden:true,
             listSearch:[]
         }
+    },
+    updated(){
+        this.loadFriend()
     },
     created(){
         this.loadFriend()

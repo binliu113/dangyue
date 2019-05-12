@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
 	<div class="app-worksList">
 		<div class="app-list d-flex flex-wrap">
 			<div class="item w-50 p-1" v-for="(cell,i) of worksList" :kye="i">

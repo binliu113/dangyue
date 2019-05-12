@@ -9,7 +9,7 @@
 <style>
  .app-container{
      padding-top:0px;
-     padding-bottom:50px;
+     padding-bottom:0px;
      overflow-x:hidden;
      font-size: 16px;
      color:#999;

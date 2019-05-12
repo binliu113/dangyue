@@ -20,16 +20,16 @@
             </ul>
         </nav>
         <div class="tabbar-content">
-            <div class="tabbar-home" v-if="type==1 || !type">
+            <div class="tabbar-home" v-show="type==1 || !type">
                 <my-home></my-home>
             </div>
             <div class="tabbar-heed" v-if="type==2">
                 <my-friend></my-friend>
             </div>
-            <div class="tabbar-message" v-if="type==3">
+            <div class="tabbar-message" v-show="type==3">
                 <my-message></my-message>
             </div>
-            <div class="tabbar-myself" v-if="type==4">
+            <div class="tabbar-myself" v-show="type==4">
                 <my-myself></my-myself>
             </div>
         </div>
@@ -75,6 +75,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+    .app-tabbar{
+        padding-bottom: 3rem;
+    }
     .app-tabbar .tabbar{
         position: fixed;
         width:100%;

@@ -1,4 +1,4 @@
-<template>
+<template lang="html">
 	<div class="app-food">
 		<header id="header" class="mui-bar mui-bar-transparent">
 	    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
