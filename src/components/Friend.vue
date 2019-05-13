@@ -68,7 +68,7 @@
                     <ul class="list-content">
                         <li class="list-item" v-for="(cell,i) of listSearch" :key="i">
                             <div class="img-box">
-                                <img src="../img/yhm.png" :src="host+cell.user_img" alt="" class="item-img">
+                                <img :src="host+cell.user_img" alt="" class="item-img">
                             </div>
                             <div class="item-content">
                                 <h4 class="fontColor" v-text="cell.user_name"></h4>

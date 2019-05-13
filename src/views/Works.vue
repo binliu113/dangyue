@@ -4,13 +4,15 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">推荐 | 西安</h1>
 		</header>
-		<div class="works-body" :style="{height:(curHeight)+'px'}" @click="hidenCmt">
-			<div class="video-box">
-				<video src="http://127.0.0.1:3000/video/food/01.mp4" class="video"></video>
-				<img src="/icon-img/play.png" alt="" class="video-icon">
+		<div class="works-body" :style="{height:(curHeight)+'px'}" @click="hidenPlay">
+			<div class="video-box" :style="videobg">
+				<div>
+					<video src="http://127.0.0.1:3000/video/food/01.mp4" class="video" loop></video>
+				</div>
+				<img src="/icon-img/play.png" alt="" class="video-icon" :style="playStyle">
 				<ul class="works-icon">
 					<li class="icon-round">
-						<img src="icon-img/WX.jpg" alt="" class="icon-img">
+						<img src="icon-img/WX.jpg" alt="" class="icon-img" @click="userLink">
 					</li>
 					<li class="icon-cell">
 						<span class="mui-icon-extra mui-icon-extra-heart-filled icon-item like-style" @click="likeClick" :style="likeStyle" id="anms"></span>
@@ -33,7 +35,7 @@
 					<nav class="nav-bar">
 						<table></table>
 						<h5 class="nav-title">65 条评论</h5>
-						<span class="mui-icon mui-icon-arrowdown nav-icon" @click="hidenCmt"></span>
+						<span class="mui-icon mui-icon-arrowdown nav-icon" @click="hidenPlay"></span>
 					</nav>
 					<div>
 						<div class="" style="text-align: center;">
@@ -83,7 +85,7 @@
 						<p>私信好友</p>
 					</li>
 				</ul>
-				<div class="">
+				<div class="" @click="hidenForward">
 					取消
 				</div>
 			</div>
@@ -95,6 +97,14 @@
 		props:['lid'],
 		data(){
 			return{
+				playStyle: {
+					opacity: true,
+					transform: true
+				},
+				setCode: true,
+				videobg: {
+					hegith: true
+				},
 				curHeight: document.documentElement.clientHeight,
 				cmtStyle: {		//评论样式
 					bottom: true
@@ -113,16 +123,29 @@
 			}
 		},
 		created(){
-
+			this.videobg.height = this.curHeight+'px';
 		},
 		methods:{
+			//用户详情跳转
+			userLink(e) {
+				e.stopPropagation();
+
+			},
+			//隐藏分享
+			hidenForward() {
+				this.forwardStyle.bottom = -16+'rem';
+				this.forwardCode = false;
+			},
+			//显示分享
 			showForward(e) {
 				e.stopPropagation()
 				this.forwardStyle.bottom = 0+'rem';
 				this.forwardCode = true;
+				this.setCode = false;
 			},
 			//点赞效果
-			likeClick() {
+			likeClick(e) {
+				e.stopPropagation();
 				if(this.likeCode){
 					this.likeStyle.color = '#fff';
 					this.likeStyle.opacity = .1
@@ -149,17 +172,41 @@
 				e.stopPropagation()
 				this.cmtStyle.bottom = 0+'rem';
 				this.cmtCode = true;
+				this.setCode = false;
 			},
-			//隐藏评论、分享状态
-			hidenCmt(e) {
+			//隐藏评论、分享状态/播放暂停
+			hidenPlay(e) {
 				e.stopPropagation();
+				//隐藏评论
 				if(this.cmtCode){
-					this.cmtStyle.bottom = -20+'rem';
+					this.cmtStyle.bottom = -26+'rem';
 					this.cmtCode = false;
+					// this.setCode = true;
+					return;
 				}
+				//隐藏分享
 				if(this.forwardCode){
-					this.forwardStyle.bottom = -16+'rem';
+					this.forwardStyle.bottom = -20+'rem';
 					this.forwardCode = false;
+					// this.setCode = true;
+					return;
+				}
+				//播放暂停
+				if(!this.cmtCode && !this.forwardCode){
+					var video = document.querySelector('video');
+					if(this.setCode){
+						this.playStyle.opacity = 0
+						this.playStyle.transform = 'scale(1.5)';
+						video.play();
+						this.setCode = false;
+						return;
+					}else{
+						video.pause();
+						this.playStyle.opacity = .4;
+						this.playStyle.transform = 'scale(1)';
+						this.setCode = true;
+						return;
+					}
 				}
 			}
 		}
@@ -191,17 +238,19 @@
 	position: relative;
 }
 .app-works .video{
+
 	width:100%;
 }
 .app-works .video-icon{
-	width: 3rem;
-	height: 3rem;
+	width: 3.5rem;
+	height: 3.5rem;
 	margin-top: -1.5rem;
 	margin-left: -1.5rem;
 	opacity: .3;
 	position: absolute;
 	top:50%;
 	left: 50%;
+	transition: .5s;
 }
 .app-works .works-icon{
 	width: 2.4rem;
@@ -210,11 +259,11 @@
 	margin-bottom: 0rem;
 	box-sizing: border-box;
 	position: absolute;
-	right: 1rem;
-	bottom: 4rem;
+	right: 1.1rem;
+	bottom: 13rem;
 }
 .app-works .works-icon .icon-cell{
-	margin: .5rem 0rem;
+	margin: 1.2rem 0rem;
 	text-align: center;
 	border-radius: 50%;
 }
@@ -222,12 +271,14 @@
 	color: #fff;
 }
 .app-works .works-icon .icon-round{
-	width: 2.5rem;
-	height: 2.5rem;
+	width: 3rem;
+	height: 3rem;
+	border: .1rem solid #e91e63;
+	border-radius: 50%;
 	box-sizing: border-box;
 	position: absolute;
 	top: -4rem;
-	right: -.1rem;
+	right: -.5rem;
 }
 .app-works .works-icon .icon-round .icon-img{
 	width: 100%;
@@ -252,7 +303,7 @@
 }
 .app-works .works-comment{
 	width: 100%;
-	height: 20rem;
+	height: 26rem;
 	background: #fff;
 	overflow: auto;
 	position: absolute;
@@ -284,13 +335,13 @@
 }
 .app-works .works-Forward{
 	width: 100%;
-	height: 15.5rem;
+	height: 20rem;
 	padding: 0rem .5rem;
 	text-align: center;
 	background: #fff;
 	position: absolute;
 	transition: .5s;
-	bottom: -15.5rem;
+	bottom: -20rem;
 }
 .app-works .works-Forward,
 .app-works .forward-title{
@@ -304,7 +355,7 @@
 	padding: .5rem 0rem;
 }
 .app-works .forward-list{
-	padding: 0rem 0;
+	padding: .5rem 0;
 	border-bottom: 1px solid rgba(0,0,0,0.1);
 	display: flex;
 	justify-content: space-around;
@@ -314,21 +365,22 @@
 	color: #555;
 }
 .app-works .fList-item .mui-icon{
-	padding: .5rem;
+	padding: .8rem;
+	margin-bottom: .5rem;
 	border-radius: 50%;
 	color: #fff;
-	background: #ddd;
+	background: rgba(0,0,0,0.5);
 }
 .app-works .forward-list .undo-bg{
-	background: #000;
+	background: #e3cd13;
 }
 .app-works .forward-list .weixin-bg{
-	background: yellow;
+	background: #20c427;
 }
 .app-works .forward-list .pengyouquan-bg{
-	background: yellow;
+	background: #13a519;
 }
 .app-works .forward-list .starhalf-bg{
-	background: yellow;
+	background: #dede0aeb;
 }
 </style>
