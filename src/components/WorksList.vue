@@ -3,14 +3,14 @@
 		<div class="app-list d-flex flex-wrap">
 			<div class="item w-50 p-1" v-for="(cell,i) of worksList" :kye="i">
 				<div @click="toWorks(cell.lid)">
-					<video :src="cell.src" width="100%" height="200" class="bg-video"></video>
+					<video :src="host+cell.src" width="100%" height="200" class="bg-video"></video>
 				</div>
 				<div class="pl-2 pr-2">
 					<p class="m-0" v-text="cell.title"></p>
 					<ul class="d-flex justify-content-between list-unstyled w-100 mt-2 mb-2">
 						<li>
 							<router-link :to="`/works/${cell.uid}`">
-								<img :src="cell.user_pic">
+								<img :src="host+cell.user_pic">
 								<span v-text="cell.user_name"></span>
 							</router-link>
 						</li>
@@ -29,6 +29,7 @@
 	export default{
 		data(){
 			return{
+				host: this.host,
 				worksList:'',
 				pno:1,
 				move:true

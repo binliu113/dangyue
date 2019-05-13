@@ -33,14 +33,14 @@
 			<div class="food-works d-flex flex-wrap">
 				<div class="item w-50 p-1" v-for="(cell,i) of list" :key="i">
 						<div>
-							<video :src="cell.src" width="100%" height="200" class="bg-video"></video>
+							<video :src="host+cell.src" width="100%" height="200" class="bg-video"></video>
 						</div>
 						<div class="pl-2 pr-2">
 							<p class="m-0" v-text="cell.title"></p>
 							<ul class="d-flex justify-content-between list-unstyled w-100 mt-2 mb-2">
 								<li>
 									<a>
-										<img :src="cell.user_pic">
+										<img :src="host+cell.user_pic">
 										<span v-text="cell.user_name"></span>
 									</a>
 								</li>
@@ -60,6 +60,7 @@ export default{
 	props:['kid'],
 	data(){
 		return{
+			host: this.host,
       		rmds:0,
       		imgs:0,
       		list:0,

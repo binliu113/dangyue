@@ -19,11 +19,11 @@
         </div>
         <div v-if="loginCode" class="login-show">
             <div class="bg-box">
-                <img src="../img/1.jpg" alt="" class="bg-img">
+                <img :src="host+user.user_img" alt="" class="bg-img">
             </div>
             <div class="my-details">
                 <div class="img-box">
-                    <img :src="user.user_img" alt="" class="my-img">
+                    <img :src="host+user.user_img" alt="" class="my-img">
                     <div class="btn-box">
                         <a href="javascript:;">
                             <span class="lbtn" @click="removeLogin">注销</span>
@@ -61,7 +61,7 @@
                         <!-- 作品类表 -->
                         <div class="works-item" v-for="item of list">
                             <router-link to="" class="works-link">
-                                <video :src="item.src" class="link-icon">
+                                <video :src="host+item.src" class="link-icon">
                                 </video>
                             </router-link>
                             <div class="works-icon">
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="list-keep" v-show="!navCode">
-                    text2
+                    暂无
                 </div>
             </div>
         </div>
@@ -83,6 +83,7 @@
 export default {
     data(){
         return{
+            host: this.host,
             tCode: false,
             loginCode: false,       //登录控制
             navCode: true,      //navbar控制

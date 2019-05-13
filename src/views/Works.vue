@@ -6,7 +6,7 @@
 		</header>
 		<div class="works-body" :style="{height:(curHeight)+'px'}" @click="hidenCmt">
 			<div class="video-box">
-				<video src="http://127.0.0.1:3000/video/01.mp4" class="video"></video>
+				<video src="http://127.0.0.1:3000/video/food/01.mp4" class="video"></video>
 				<img src="/icon-img/play.png" alt="" class="video-icon">
 				<ul class="works-icon">
 					<li class="icon-round">
@@ -49,19 +49,19 @@
 				<div class="forward-title">分享到</div>
 				<ul class="forward-list">
 					<li class="fList-item">
-						<span class="mui-icon mui-icon-undo"></span>
+						<span class="mui-icon mui-icon-undo undo-bg"></span>
 						<p>转发</p>
 					</li>
 					<li class="fList-item">
-						<span class="mui-icon mui-icon-weixin"></span>
+						<span class="mui-icon mui-icon-weixin weixin-bg"></span>
 						<p>微信</p>
 					</li>
 					<li class="fList-item">
-						<span class="mui-icon mui-icon-pengyouquan"></span>
+						<span class="mui-icon mui-icon-pengyouquan pengyouquan-bg"></span>
 						<p>朋友圈</p>
 					</li>
 					<li class="fList-item">
-						<span class="mui-icon mui-icon-starhalf"></span>
+						<span class="mui-icon mui-icon-starhalf starhalf-bg"></span>
 						<p>QQ空间</p>
 					</li>
 				</ul>
@@ -182,7 +182,6 @@
 	justify-content: center;
 }
 .app-works .video-box{
-	padding: 5rem 0;
 	height: 25rem;
 	background: #000;
 	box-sizing: border-box;
@@ -314,9 +313,22 @@
 	width: 25%;
 	color: #555;
 }
-.app-works .forward-list .fList-item .mui-icon{
+.app-works .fList-item .mui-icon{
 	padding: .5rem;
 	border-radius: 50%;
+	color: #fff;
 	background: #ddd;
+}
+.app-works .forward-list .undo-bg{
+	background: #000;
+}
+.app-works .forward-list .weixin-bg{
+	background: yellow;
+}
+.app-works .forward-list .pengyouquan-bg{
+	background: yellow;
+}
+.app-works .forward-list .starhalf-bg{
+	background: yellow;
 }
 </style>

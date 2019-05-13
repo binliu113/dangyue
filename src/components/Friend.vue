@@ -13,7 +13,7 @@
                 <ul class="list-content">
                     <li class="list-item" v-for="(cell,i) of listFriend" :key="i">
                         <div class="img-box">
-                            <img src="../img/yhm.png" :src="host+cell.fpic" alt="" class="item-img">
+                            <img :src="host+cell.fpic" alt="" class="item-img">
                         </div>
                         <div class="item-content">
                             <h4 class="fontColor" v-text="cell.fname"></h4>
