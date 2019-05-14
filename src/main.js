@@ -17,7 +17,7 @@ Vue.use(MintUi)  //引用mint ui
 Vue.use(Vuex)    //引用vuex
 //保存地址
 Vue.prototype.host = "http://127.0.0.1:3000/";
-Vue.prototype.ws = "ws://127.0.0.1:3001";
+Vue.prototype.ws = "ws://127.0.0.1:3001/";
 
 new Vue({
   router,

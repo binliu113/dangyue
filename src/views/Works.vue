@@ -91,16 +91,16 @@
 			</div>
 		</div>
 		<div class="works-detail">
-			<div class="">
-				<div class="">
+			<div class="detail-box">
+				<div class="box-left">
 					<router-link to="" class="router-link">
 						<img src="icon-img/WX.jpg" class="user-img"/>
-						<span>@<span>用户名在这里展示</span></span>
+						<span class="uname-text">@<span>用户名在这里展示</span></span>
 					</router-link>
-					<p>@<span>这里展示标题的内容</span></p>
+					<p class="title-text">@<span>这里展示adfasdfasfafasdfas标题的内容</span></p>
 				</div>
-				<div class="">
-					<img src="" alt="">
+				<div class="box-right" :style="boxRightStyle">
+					<img src="icon-img/WX.jpg" alt="" class="right-img">
 				</div>
 			</div>
 		</div>
@@ -112,6 +112,10 @@
 		data(){
 			return{
 				host: this.host,
+				boxRightStyle: {
+					transform: true,
+					transition: true
+				},
 				playStyle: {
 					opacity: true,
 					transform: true
@@ -149,7 +153,7 @@
 			//隐藏分享
 			hidenForward() {
 				this.forwardCode = false;
-				this.forwardStyle.bottom = -16+'rem';
+				this.forwardStyle.bottom = -20+'rem';
 			},
 			//显示分享
 			showForward(e) {
@@ -209,8 +213,10 @@
 				//播放暂\停
 				if(!this.cmtCode && !this.forwardCode){
 					var video = document.querySelector('video');
+					var time = (video.duration)/5
 					if(video.paused){
 						//播放
+						//播放动画1
 						this.playStyle.opacity = 0
 						this.playStyle.transform = 'scale(1.5)';
 						video.play();
@@ -221,6 +227,8 @@
 						this.playStyle.transform = 'scale(1)';
 						video.pause();
 						// this.setCode = true;
+						this.boxRightStyle.transition = 0;
+						this.boxRightStyle.transform = 'rotate(0deg)'
 					}
 				}
 			}
@@ -322,6 +330,7 @@
 	overflow: auto;
 	position: absolute;
 	transition: .5s;
+	z-index: 1;
 }
 .app-works .works-comment .comment{
 	position: relative;
@@ -356,6 +365,7 @@
 	position: absolute;
 	transition: .5s;
 	bottom: -20rem;
+	z-index: 1;
 }
 .app-works .works-Forward,
 .app-works .forward-title{
@@ -400,17 +410,57 @@
 .app-works .works-detail{
 	height: 10rem;
 	width: 100%;
-	padding: .5rem;
-	background: rgba(0,0,0,.4);
+	padding: 1rem;
+	background: transparent;
 	position: absolute;
 	bottom: 0rem;
 }
+.app-works .works-detail .detail-box{
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+}
+.app-works .works-detail .detail-box .box-left{
+	width: 60%;
+}
 .app-works .works-detail .router-link{
 	display: inline-block;
+	padding: 1.5rem 0;
 }
 .app-works .works-detail .user-img{
 	width: 2.5rem;
 	height: 2.5rem;
+	border: .04rem solid #fff;
 	border-radius: 50%;
+}
+.app-works .works-detail .uname-text{
+	width: 100%;
+	color: #fff;
+	padding: 0rem .5rem;
+	overflow: hidden;
+	white-space:nowrap;
+}
+.app-works .works-detail .title-text{
+	width: 100%;
+	padding: .5rem 0;
+	overflow: hidden;
+	white-space:nowrap;
+}
+.app-works .works-detail .box-right{
+	background: #000;
+	padding: .7rem;
+	border: .04rem solid #fff;
+	border-radius: 50%;
+	transition: 5s;
+	position: absolute;
+	right: 0rem;
+	bottom: .5rem;
+}
+.app-works .works-detail .box-right .right-img{
+	width: 1.7rem;
+	height: 1.7rem;
+	border-radius: 50%;
+	vertical-align: middle;
 }
 </style>

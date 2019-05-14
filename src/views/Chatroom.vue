@@ -4,14 +4,14 @@
             <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="chatColse"></a>
             <h1 class="mui-title">聊天室</h1>
         </header>
-        <div class="chat-body">
+        <div class="chat-body" :style="{height:(curHeight-45)+'px'}">
             <div class="chat-box" v-for="(item,i) of msgArr">
                 <ul class="chat-user">
                     <li class="user-img-box" :class="item.user_img==user_img? 'right' : 'left' ">
-                        <img :src="item.user_img" alt="" class="user-img">
+                        <img :src="host+item.user_img" alt="" class="user-img">
                     </li>
                     <li class="user-name" :class="item.user_img==user_img? 'right' : 'left' ">
-                        <h4 v-text="item.user_name">用户名</h4>
+                        <h4 v-text="item.user_name"></h4>
                     </li>
                 </ul>
                 <div class="chat-content">
@@ -36,6 +36,8 @@
 export default{
     data(){
         return{
+            host: this.host,
+            curHeight: document.documentElement.clientHeight,
             msg:'',
             msgArr:[],
             socket:null,
@@ -81,7 +83,6 @@ export default{
 }
 .app-chatroom .chat-body{
     overflow: scroll;
-    height:38rem;
     padding-top:4rem;
     padding-left:1rem;
     padding-right:1rem;
@@ -174,7 +175,7 @@ export default{
 }
 .app-chatroom .send-box .send-parent .send-btn{
     line-height: 2.2rem;
-    padding: .5rem 1rem;
+    padding: .5rem .7rem;
     background-color: #007bff;
     font-size: 18px;
     color:#fff;

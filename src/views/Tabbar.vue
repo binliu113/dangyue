@@ -8,8 +8,10 @@
                 <li class="tabbar-item" @click="loadHeed" :class="type==2 ? 'active' : ' ' ">
                     <span>关注</span>
                 </li>
-                <li>
-                    <span class="mui-icon mui-icon-plusempty"></span>
+                <li class="tabbar-item">
+                    <div class="item-icon">
+                        <span class="mui-icon mui-icon-plusempty"></span>
+                    </div>
                 </li>
                 <li class="tabbar-item" @click="loadMessage" :class="type==3 ? 'active' : ' ' ">
                     <span>消息</span>
@@ -84,14 +86,23 @@ export default {
         bottom: 0px;
         z-index: 1;
     }
-    .app-tabbar .tabbar>.tabbar-bar{
+    .app-tabbar .tabbar .tabbar-bar{
         display: flex;
         width:100%;
-        margin:0;padding:0.7rem 0;
+        margin:0;
+        padding: 0;
         background: #000;
         justify-content: space-around;
     }
+    .app-tabbar .tabbar .tabbar-bar .tabbar-item{
+        padding: .7rem 0;
+    }
     .app-tabbar .active{
         color:#fff;
+    }
+    .app-tabbar .item-icon{
+        color: #000;
+        background: #fff;
+        border-radius: .5rem;
     }
 </style>
