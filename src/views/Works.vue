@@ -91,9 +91,18 @@
 			</div>
 		</div>
 		<div class="works-detail">
-			<router-link>
-				<img src="icon-img/WX.jpg" />
-			</router-link>
+			<div class="">
+				<div class="">
+					<router-link to="" class="router-link">
+						<img src="icon-img/WX.jpg" class="user-img"/>
+						<span>@<span>用户名在这里展示</span></span>
+					</router-link>
+					<p>@<span>这里展示标题的内容</span></p>
+				</div>
+				<div class="">
+					<img src="" alt="">
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
@@ -102,6 +111,7 @@
 		props:['lid'],
 		data(){
 			return{
+				host: this.host,
 				playStyle: {
 					opacity: true,
 					transform: true
@@ -235,7 +245,7 @@
 }
 .app-works .video-box{
 	height: 25rem;
-	background: #000;
+	background: rgba(0,0,0,.5);
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
@@ -243,7 +253,6 @@
 	position: relative;
 }
 .app-works .video{
-
 	width:100%;
 }
 .app-works .video-icon{
@@ -389,10 +398,19 @@
 	background: #dede0aeb;
 }
 .app-works .works-detail{
-	height: 3.5rem;
+	height: 10rem;
 	width: 100%;
-	background: rgba(255,255,255,.2);
+	padding: .5rem;
+	background: rgba(0,0,0,.4);
 	position: absolute;
 	bottom: 0rem;
+}
+.app-works .works-detail .router-link{
+	display: inline-block;
+}
+.app-works .works-detail .user-img{
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: 50%;
 }
 </style>
