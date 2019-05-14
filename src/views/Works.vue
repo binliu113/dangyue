@@ -4,7 +4,7 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">推荐 | 西安</h1>
 		</header>
-		<div class="works-body" :style="{height:(curHeight)+'px'}" @click="hidenPlay">
+		<div class="works-body" :style="{height:(curHeight)+'px'}" @click="hidenAndPlay">
 			<div class="video-box" :style="videobg">
 				<div>
 					<video src="http://127.0.0.1:3000/video/food/01.mp4" class="video" loop></video>
@@ -35,7 +35,7 @@
 					<nav class="nav-bar">
 						<table></table>
 						<h5 class="nav-title">65 条评论</h5>
-						<span class="mui-icon mui-icon-arrowdown nav-icon" @click="hidenPlay"></span>
+						<span class="mui-icon mui-icon-arrowdown nav-icon" @click="hidenAndPlay"></span>
 					</nav>
 					<div>
 						<div class="" style="text-align: center;">
@@ -46,7 +46,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="">
+		<div>
 			<div class="works-Forward" :style="forwardStyle">
 				<div class="forward-title">分享到</div>
 				<ul class="forward-list">
@@ -90,6 +90,11 @@
 				</div>
 			</div>
 		</div>
+		<div class="works-detail">
+			<router-link>
+				<img src="icon-img/WX.jpg" />
+			</router-link>
+		</div>
 	</div>
 </template>
 <script>
@@ -101,7 +106,7 @@
 					opacity: true,
 					transform: true
 				},
-				setCode: true,
+				// setCode: true,
 				videobg: {
 					hegith: true
 				},
@@ -133,15 +138,15 @@
 			},
 			//隐藏分享
 			hidenForward() {
-				this.forwardStyle.bottom = -16+'rem';
 				this.forwardCode = false;
+				this.forwardStyle.bottom = -16+'rem';
 			},
 			//显示分享
 			showForward(e) {
 				e.stopPropagation()
-				this.forwardStyle.bottom = 0+'rem';
 				this.forwardCode = true;
 				this.setCode = false;
+				this.forwardStyle.bottom = 0+'rem';
 			},
 			//点赞效果
 			likeClick(e) {
@@ -170,42 +175,42 @@
 			//显示评论界面
 			showCmt(e) {
 				e.stopPropagation()
-				this.cmtStyle.bottom = 0+'rem';
 				this.cmtCode = true;
 				this.setCode = false;
+				this.cmtStyle.bottom = 0+'rem';
 			},
 			//隐藏评论、分享状态/播放暂停
-			hidenPlay(e) {
+			hidenAndPlay(e) {
 				e.stopPropagation();
 				//隐藏评论
 				if(this.cmtCode){
-					this.cmtStyle.bottom = -26+'rem';
 					this.cmtCode = false;
-					// this.setCode = true;
+					this.setCode = true;
+					this.cmtStyle.bottom = -26+'rem';
 					return;
 				}
 				//隐藏分享
 				if(this.forwardCode){
-					this.forwardStyle.bottom = -20+'rem';
 					this.forwardCode = false;
-					// this.setCode = true;
+					this.setCode = true;
+					this.forwardStyle.bottom = -20+'rem';
 					return;
 				}
-				//播放暂停
+				//播放暂\停
 				if(!this.cmtCode && !this.forwardCode){
 					var video = document.querySelector('video');
-					if(this.setCode){
+					if(video.paused){
+						//播放
 						this.playStyle.opacity = 0
 						this.playStyle.transform = 'scale(1.5)';
 						video.play();
-						this.setCode = false;
-						return;
+						// this.setCode = false;
 					}else{
-						video.pause();
+						//暂停
 						this.playStyle.opacity = .4;
 						this.playStyle.transform = 'scale(1)';
-						this.setCode = true;
-						return;
+						video.pause();
+						// this.setCode = true;
 					}
 				}
 			}
@@ -382,5 +387,12 @@
 }
 .app-works .forward-list .starhalf-bg{
 	background: #dede0aeb;
+}
+.app-works .works-detail{
+	height: 3.5rem;
+	width: 100%;
+	background: rgba(255,255,255,.2);
+	position: absolute;
+	bottom: 0rem;
 }
 </style>
