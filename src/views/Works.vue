@@ -7,16 +7,16 @@
 		<div class="works-body" :style="{height:(curHeight)+'px'}" @click="hidenAndPlay">
 			<div class="video-box" :style="videobg">
 				<div>
-					<video src="http://127.0.0.1:3000/video/food/01.mp4" class="video" loop></video>
+					<video :src="host+wDetails.src" class="video" loop></video>
 				</div>
 				<img src="/icon-img/play.png" alt="" class="video-icon" :style="playStyle">
 				<ul class="works-icon">
 					<li class="icon-round">
-						<img src="icon-img/WX.jpg" alt="" class="icon-img" @click="userLink">
+						<img :src="host+wDetails.user_pic" alt="" class="icon-img" @click="userLink">
 					</li>
 					<li class="icon-cell">
 						<span class="mui-icon-extra mui-icon-extra-heart-filled icon-item like-style" @click="likeClick" :style="likeStyle" id="anms"></span>
-						<p>11w</p>
+						<p v-text="wDetails.like_num"></p>
 					</li>
 					<li class="icon-cell" @click="showCmt">
 						<span class="mui-icon mui-icon-chatbubble icon-item"></span>
@@ -94,13 +94,14 @@
 			<div class="detail-box">
 				<div class="box-left">
 					<router-link to="" class="router-link">
-						<img src="icon-img/WX.jpg" class="user-img"/>
-						<span class="uname-text">@<span>用户名在这里展示</span></span>
+						<img :src="host+wDetails.user_pic" class="user-img"/>
+						<span class="uname-text">@用户/ <span v-text="wDetails.user_name">名在这里展示</span></span>
 					</router-link>
-					<p class="title-text">@<span>这里展示adfasdfasfafasdfas标题的内容</span></p>
+					<p class="kind-text">@类型 / <span v-text="wDetails.kind"></span></p>
+					<p class="title-text">@/ <span v-text="wDetails.title">这里展示s标题的内容</span></p>
 				</div>
 				<div class="box-right" :style="boxRightStyle">
-					<img src="icon-img/WX.jpg" alt="" class="right-img">
+					<img :src="host+wDetails.user_pic" alt="" class="right-img">
 				</div>
 			</div>
 		</div>
@@ -112,6 +113,7 @@
 		data(){
 			return{
 				host: this.host,
+				wDetails:{},   //接受详情数据对象
 				boxRightStyle: {
 					transform: true,
 					transition: true
@@ -143,8 +145,32 @@
 		},
 		created(){
 			this.videobg.height = this.curHeight+'px';
+			this.loadData();
 		},
 		methods:{
+			//更新like_num;
+			updateLike(like) {
+				var url = this.host+'worksList/like';
+				this.axios.get(url,{
+					params: {
+						like_num: like,
+						lid: this.lid
+					}
+				}).then((result)=>{
+					// console.log(result);
+					//返回 1 正确
+				})
+			},
+			//作品初始数据
+			loadData() {
+				var url = this.host+'worksList/details';
+				this.axios.get(url,{
+					params: { lid: this.lid }
+				}).then((result)=>{
+					this.wDetails = result.data.data[0];
+					console.log(this.wDetails)
+				})
+			},
 			//用户详情跳转
 			userLink(e) {
 				e.stopPropagation();
@@ -175,6 +201,9 @@
 							this.likeStyle.transform = 'scale(1)';
 					},500)
 					this.likeCode = false;
+					//更新数据库
+					this.wDetails.like_num++;
+					this.updateLike(this.wDetails.like_num)		//更新
 				}else{
 					this.likeStyle.opacity = .5;
 					this.likeStyle.transform = 'scale(.5)';
@@ -184,6 +213,9 @@
 						this.likeStyle.color = '#fff';
 					})
 					this.likeCode = true;
+					//更新数据库
+					this.wDetails.like_num--;
+					this.updateLike(this.wDetails.like_num)		//更新
 				}
 			},
 			//显示评论界面
@@ -223,7 +255,7 @@
 						// this.setCode = false;
 					}else{
 						//暂停
-						this.playStyle.opacity = .4;
+						this.playStyle.opacity = .3;
 						this.playStyle.transform = 'scale(1)';
 						video.pause();
 						// this.setCode = true;
@@ -416,6 +448,7 @@
 	bottom: 0rem;
 }
 .app-works .works-detail .detail-box{
+	height: 100%;
 	box-sizing: border-box;
 	display: flex;
 	justify-content: space-between;
@@ -426,7 +459,7 @@
 }
 .app-works .works-detail .router-link{
 	display: inline-block;
-	padding: 1.5rem 0;
+	padding: .5rem 0;
 }
 .app-works .works-detail .user-img{
 	width: 2.5rem;
@@ -441,11 +474,15 @@
 	overflow: hidden;
 	white-space:nowrap;
 }
+.app-works .works-detail .kind-text{
+	margin:0;
+}
 .app-works .works-detail .title-text{
 	width: 100%;
-	padding: .5rem 0;
+	height: 4rem;
+	margin: 0;
 	overflow: hidden;
-	white-space:nowrap;
+	white-space: wrap;
 }
 .app-works .works-detail .box-right{
 	background: #000;

@@ -19,11 +19,11 @@
         </div>
         <div v-if="loginCode" class="login-show">
             <div class="bg-box">
-                <img :src="host+user.user_img" alt="" class="bg-img">
+                <img :src="host+user.user_img" class="bg-img">
             </div>
             <div class="my-details">
                 <div class="img-box">
-                    <img :src="host+user.user_img" alt="" class="my-img">
+                    <img :src="host+user.user_img" class="my-img">
                     <div class="btn-box">
                         <a href="javascript:;">
                             <span class="lbtn" @click="removeLogin">注销</span>
@@ -43,8 +43,8 @@
                 </div>
                 <div class="group">
                     <span class="group-item"><strong v-text="count">0</strong>获赞</span>
-                    <span class="group-item"><strong>7</strong>关注</span>
-                    <span class="group-item"><strong>4</strong>粉丝</span>
+                    <span class="group-item"><strong>0</strong>关注</span>
+                    <span class="group-item"><strong>0</strong>粉丝</span>
                 </div>
                 <ul class="list-navbar">
                     <li class="list-item" :class="navCode==true ? 'active': ' ' " @click="showWorks">

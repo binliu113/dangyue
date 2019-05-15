@@ -157,6 +157,9 @@ export default {
     color:#fff;
     font-size:16px;
 }
+.app-friend .mui-bar-transparent{
+  background-color: inherit;
+}
 .app-friend .mui-bar{
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }

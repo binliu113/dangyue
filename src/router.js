@@ -5,12 +5,14 @@ import Kind from './views/Kind.vue'
 import Tabbar from './views/Tabbar.vue'  //index
 import Chatroom from './views/Chatroom'
 import WorksList from './components/WorksList'
+import Youself from './views/Youself'
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {path: '/',component: Tabbar},
     {path:'/index',component:Tabbar},
+    {path:'/youself/:uid', component:Youself,props:true},
     {path:'/kind/:kid',component:Kind,props:true},
     {path:'/works/:lid', component:Works,props:true},
     {path:'/chatroom',component:Chatroom},

@@ -6,7 +6,7 @@
     	</header>
 	    <mt-swipe :auto="4000" :show-indicators="false">
 	    	<mt-swipe-item v-for="(cell,i) of imgs" :key="i">
-	    		<img :src="cell.pic">
+	    		<img :src="host+cell.pic">
 	    	</mt-swipe-item>
 	    </mt-swipe>
       <div class="food-list">
@@ -16,7 +16,7 @@
           <ul class="list-unstyled">
               <li class="mt-2 list-item" v-for="(cell,i) of rmds" :key="i">
                   <a href="javascript:;" class="d-block">
-                      <img :src="cell.pic" alt="" class="float-left">
+                      <img :src="host+cell.pic" alt="" class="float-left">
                       <div class="of-h">
                           <h5 class="m-0 mb-1" v-text="cell.title"></h5>
                           <p class="m-0" v-text="cell.score"></p>
@@ -60,11 +60,11 @@ export default{
 	props:['kid'],
 	data(){
 		return{
-			host: this.host,
-      		rmds:0,
-      		imgs:0,
-      		list:0,
-			header:0
+				host: this.host,
+    		rmds:0,
+      	imgs:0,
+      	list:0,
+				header:0
 		}
 	},
   	created(){
