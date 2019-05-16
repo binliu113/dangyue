@@ -9,7 +9,7 @@
                     <span>关注</span>
                 </li>
                 <li class="tabbar-item">
-                    <div class="item-icon">
+                    <div class="item-icon" @click="uploadLink">
                         <span class="mui-icon mui-icon-plusempty"></span>
                     </div>
                 </li>
@@ -50,6 +50,9 @@ export default {
         }
     },
     methods:{
+        uploadLink() {
+            this.$router.push('/upload');
+        },
         loadMyself(){
            sessionStorage.setItem('tabbarCode',4);
             this.type=  sessionStorage.getItem('tabbarCode')

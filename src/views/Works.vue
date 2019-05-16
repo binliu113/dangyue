@@ -1,8 +1,8 @@
 <template lang="html">
 	<div class="app-works">
 		<header id="header" class="mui-bar mui-bar-transparent">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 class="mui-title">推荐 | 西安</h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="outLink"></a>
+			<h1 class="mui-title"></h1>
 		</header>
 		<div class="works-body" :style="{height:(curHeight)+'px'}" @click="hidenAndPlay">
 			<div class="video-box" :style="videobg">
@@ -148,6 +148,9 @@
 			this.loadData();
 		},
 		methods:{
+			outLink() {
+				this.$router.back(-1);
+			},
 			//更新like_num;
 			updateLike(like) {
 				var url = this.host+'worksList/like';
@@ -168,7 +171,6 @@
 					params: { lid: this.lid }
 				}).then((result)=>{
 					this.wDetails = result.data.data[0];
-					console.log(this.wDetails)
 				})
 			},
 			//用户详情跳转

@@ -1,12 +1,16 @@
 <template lang="html">
-    <div class="app-myself">
+    <div class="app-youself">
+        <header id="header" class="mui-bar mui-bar-transparent">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title"></h1>
+		</header>
         <!-- 加载提示 -->
-        <!-- <div class="Toast" v-if="tCode" :style="tostStyle">
+        <div class="Toast" v-if="tCode" :style="tostStyle">
             <div class="toast-box">
                 <span class="mui-spinner"></span>
                 <p>正在加载中..</p>
             </div>
-        </div> -->
+        </div>
         <div class="login-show">
             <div class="bg-box">
                 <img :src="host+user.user_img" class="bg-img">
@@ -16,14 +20,14 @@
                     <img :src="host+user.user_img" class="my-img">
                     <div class="btn-box">
                         <a href="javascript:;">
-                            <span class="lbtn">天机</span>
+                            <span class="lbtn" @click="addFriend">添加好友</span>
                         </a>
                     </div>
                 </div>
                 <!-- 用户信息 -->
                 <div class="details-user">
                     <h4 class="user-name" v-text="user.user_name"></h4>
-                    <p class="user-title">当悦号：{{user.phone}}</p>
+                    <p class="user-title">@当悦号：{{user.phone}}</p>
                 </div>
                 <div class="icon-box">
                     <p v-text="user.signature">这个人很懒什么都没留下</p>
@@ -38,10 +42,10 @@
                 </div>
                 <ul class="list-navbar">
                     <li class="list-item" :class="navCode==true ? 'active': ' ' " @click="showWorks">
-                        <span class="item-child">我的作品</span>
+                        <span class="item-child">他的作品</span>
                     </li>
                     <li class="list-item" :class="navCode==false ? 'active': ' ' " @click="showLike">
-                        <span class="item-child">我的收藏</span>
+                        <span class="item-child">他的收藏</span>
                     </li>
                 </ul>
             </div>
@@ -49,7 +53,7 @@
                 <div class="list-works" v-show="navCode">
                     <div class="works-list">
                         <!-- 作品类表 -->
-                        <div class="works-item" v-for="item of list">
+                        <div class="works-item" v-for="item of list" v-if="list.length>0">
                             <router-link to="" class="works-link">
                                 <video :src="host+item.src" class="link-icon">
                                 </video>
@@ -59,10 +63,15 @@
                                 <span>{{item.like_num}}赞</span>
                             </div>
                         </div>
+                        <div class="works-hiden" v-if="list.length==0">
+                            暂无作品...
+                        </div>
                     </div>
                 </div>
                 <div class="list-keep" v-show="!navCode">
-                    暂无
+                    <div class="works-hiden">
+                        暂无收藏...
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,6 +80,7 @@
 
 <script>
 export default {
+    props:['uid'],
     data(){
         return{
             host: this.host,
@@ -89,17 +99,38 @@ export default {
       var url = this.host+'user/details';
       this.axios.get(url,{
           params:{
-              uid:1
+              uid:this.uid
           }
-      }).then(res=>{
-          var user = res.data.user;
-          this.user = res.data.user;
-          this.count = res.data.count;
-          this.list = res.data.data;
+      }).then(result=>{
+          var user = result.data.user;
+          this.user = result.data.user;
+          this.count = result.data.count;
+          this.list = result.data.data;
           this.tCode = false;
       })
     },
     methods:{
+        outLink() {
+            this.$router.back(-1);
+        },
+        addFriend() {
+            var url  = this.host+'user/add';
+            this.axios.get(url,{
+                params: {
+                    user_id:this.uid
+                }
+            }).then((result)=>{
+                if(result.data.code==1){
+                    this.$toast('添加成功')
+                }else if(result.data.code==-1){
+                    this.$toast('未能添加成功')
+                }else if(result.data.code==-2){
+                    this.$toast('您还未登录')
+                }else if(result.data.code==-3){
+                    this.$toast('该用户已是您的好友')
+                }
+            })
+        },
         showWorks() {
             this.navCode = true;
         },
@@ -112,8 +143,9 @@ export default {
 
 <style lang="css" scoped>
 /* 提示样式 */
-.app-myself .Toast{
+.app-youself .Toast{
     width: 100%;
+    color: #fff;
     text-align: center;
     background-image: linear-gradient(91deg, rgb(2, 0, 49) 0px, rgb(109, 51, 83) 140%);
     justify-content: center;
@@ -122,7 +154,7 @@ export default {
     position: fixed;
     top: 0;
 }
-.app-myself .toast-box{
+.app-youself .toast-box{
     padding-top: 1rem;
     margin: 0 auto;
     width: 10rem;
@@ -131,97 +163,100 @@ export default {
     display: inline-block;
 }
 /* 主样式 */
-.app-myself .bg-box{
+.app-youself .mui-bar-transparent{
+    background:rgba(0,0,0,0.5);
+}
+.app-youself .bg-box{
     width: 100%;
     height: 12rem;
     border-bottom: .1rem solid rgba(0, 0, 0, .5);
 }
-.app-myself .bg-box .bg-img{
+.app-youself .bg-box .bg-img{
     width: 100%;
     height:100%;
 }
-.app-myself .my-details{
+.app-youself .my-details{
     background: rgba(0, 0, 0, .5);
     padding: 0rem 1rem;
     padding-top: 6rem;
     position: relative;
 }
-.app-myself .my-details .img-box{
+.app-youself .my-details .img-box{
     width: 100%;
     height: 7rem;
     position: absolute;
     top: -1.5rem;
 }
-.app-myself .my-details .my-img{
+.app-youself .my-details .my-img{
     width: 7rem;
     height: 100%;
     border: .2rem solid rgba(0, 0, 0, .5);
     border-radius: 50%;
 }
-.app-myself .my-details .btn-box{
+.app-youself .my-details .btn-box{
     display: inline-block;
     position: absolute;
-    top: 3rem;
-    right: 2rem;
+    top: 2.3rem;
+    right: 4rem;
 }
-.app-myself .my-details .lbtn{
+.app-youself .my-details .lbtn{
     font-size: 17px;
     color: #fff;
-    background: rgba(102,102,102,.5);
-    border-radius: .2rem;
-    padding: .3rem .7rem;
+    background: #e91e63;
+    border-radius: .0rem;
+    padding: .5rem 1.5rem;
 }
-.app-myself .my-details .details-user{
+.app-youself .my-details .details-user{
     border-bottom: .05rem solid rgba(102,102,102,.5);
     margin-bottom: .5rem;
 }
-.app-myself .my-details .user-name{
+.app-youself .my-details .user-name{
     color: #fff;
     margin: .5rem 0;
 }
-.app-myself .my-details .user-title{
+.app-youself .my-details .user-title{
     font-size: 10px;
     color: #fff;
 }
-.app-myself .my-details .icon-box .icon-item{
+.app-youself .my-details .icon-box .icon-item{
     font-size: 10px;
     margin: 0 .2rem;
     padding: .3rem .5rem;
     border-radius: .2rem;
     background: rgba(102,102,102,.5);
 }
-.app-myself .my-details .group{
+.app-youself .my-details .group{
     margin: 1rem 0;
 }
-.app-myself .my-details .group-item{
+.app-youself .my-details .group-item{
     margin: .5rem;
     color: #fff;
     font-size: 16px;
 }
-.app-myself .list-navbar{
+.app-youself .list-navbar{
     padding: 0;
     margin-bottom: 0;
     list-style: none;
     display: flex;
     justify-content: center;
 }
-.app-myself .list-item{
+.app-youself .list-item{
     padding: .5rem;
 }
-.app-myself .list-item.active{
+.app-youself .list-item.active{
     color: #fff;
     border-bottom: 1px solid #ffc107;
 }
-.app-myself .list-content{
+.app-youself .list-content{
     margin-top: .1rem;
 }
-.app-myself  .list-content .works-list{
+.app-youself  .list-content .works-list{
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
 }
-.list-content .works-list .works-item{
+.app-youself .list-content .works-list .works-item{
     width: 49.5%;
     height: 12rem;
     background: #000;
@@ -232,11 +267,17 @@ export default {
     align-items: center;
     position: relative;
 }
-.list-content .works-list .works-link,.list-content .works-list .works-link .link-icon{
+.app-youself .works-hiden{
+    width: 100%;
+    height: 5rem;
+    text-align: center;
+    padding: 1.5rem;
+}
+.app-youself .list-content .works-list .works-link,.list-content .works-list .works-link .link-icon{
     width: 100%;
     display: block;
 }
-.list-content .works-list .works-icon{
+.app-youself .list-content .works-list .works-icon{
     color: #fff;
     font-size: 16px;
     position: absolute;

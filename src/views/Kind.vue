@@ -1,7 +1,7 @@
 <template lang="html">
 	<div class="app-food">
 		<header id="header" class="mui-bar mui-bar-transparent">
-	    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="outLink"></a>
 	    <h1 class="mui-title" v-text="header"></h1>
     	</header>
 	    <mt-swipe :auto="4000" :show-indicators="false">
@@ -60,17 +60,20 @@ export default{
 	props:['kid'],
 	data(){
 		return{
-				host: this.host,
-    		rmds:0,
+		host: this.host,
+    	rmds:0,
       	imgs:0,
       	list:0,
-				header:0
+		header:0
 		}
 	},
   	created(){
   		this.loadKind();
   	},
   	methods:{
+		outLink(e) {
+			this.$router.back(-1);
+		},
 	    loadKind(){
 	      var url = `${this.host}kind`;
 	      this.axios.get(url,{
@@ -94,7 +97,7 @@ export default{
 .app-food header,.app-food .mint-swipe,.app-food .food-list,.app-food .food-footr>div:first-child{
     padding:0 0.5rem;
 }
-.app-food .food-list>div:first-child>p,.app-food .food-footr>div:first-child>p{
+.app-food .food-list div:first-child p,.app-food .food-footr div:first-child p{
     border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 .app-food .mui-bar-transparent{

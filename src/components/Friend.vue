@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="app-friend">
         <header id="header" class="mui-bar mui-bar-transparent">
-            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <!-- <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a> -->
             <h1 class="mui-title">
                 <span class="t-item" :class="nav===1 ? 'active' : '' " @click="showList">好友列表</span>
                 <span class="t-item" :class="nav===2 ? 'active' : '' " @click="showFind">发现好友</span>
@@ -11,13 +11,13 @@
             <div class="friend-list" v-if="this.nav===1">
                 <p>我的好友（互相关注）</p>
                 <ul class="list-content">
-                    <li class="list-item" v-for="(cell,i) of listFriend" :key="i">
+                    <li class="list-item" v-for="(cell,i) of listFriend" :key="i" @click="userLink(cell.user_id)">
                         <div class="img-box">
                             <img :src="host+cell.fpic" alt="" class="item-img">
                         </div>
                         <div class="item-content">
                             <h4 class="fontColor" v-text="cell.fname"></h4>
-                            <p v-text="cell.signature">这个人很懒</p>
+                            <p v-text="cell.signature"></p>
                         </div>
                         <span class="mui-icon mui-icon-chatbubble"></span>
                     </li>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="search-friend" v-show="!hiden">
                     <ul class="list-content">
-                        <li class="list-item" v-for="(cell,i) of listSearch" :key="i">
+                        <li class="list-item" v-for="(cell,i) of listSearch" :key="i" @click="userLink(cell.uid)">
                             <div class="img-box">
                                 <img :src="host+cell.user_img" alt="" class="item-img">
                             </div>
@@ -74,7 +74,6 @@
                                 <h4 class="fontColor" v-text="cell.user_name"></h4>
                                 <p v-text="cell.signature">这个人很懒</p>
                             </div>
-                            <a href="javascript:;" class="search-btn">关注</a>
                         </li>
                     </ul>
                 </div>
@@ -97,12 +96,16 @@ export default {
         }
     },
     updated(){
-        this.loadFriend()
+        // this.loadFriend()
     },
     created(){
         this.loadFriend()
     },
     methods:{
+        userLink(uid) {
+            //用户详情跳转
+            this.$router.push('/youself/'+uid);
+        },
         searchFriend(){
             var url = `${this.host}user/search?kw=${this.kw}`;
             this.axios.get(url,{
@@ -199,11 +202,12 @@ export default {
 }
 .app-friend .list-content .item-img{
     width:100%;
-    height: 3rem;
+    height: 100%;
     border-radius: 50%
 }
-.app-friend .list-content .item-content{
+.app-friend .search-friend .list-content .item-content{
     padding:0 1rem;
+    border-bottom: .01rem solid rgba(0, 0, 0, .5);
     overflow: hidden;
 }
 .app-friend .mui-icon-chatbubble{
@@ -240,9 +244,6 @@ export default {
     color: #fff;
     margin-right: .4rem;
     vertical-align: middle;
-}
-.app-friend .friend-find .list-content{
-    border-bottom: 1px solid rgba(0,0,0,.1);
 }
 .app-friend .friend-find .img-box{
     width: 2.5rem;

@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="app-chatroom">
         <header id="header" class="mui-bar mui-bar-transparent">
-            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="chatColse"></a>
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="outLink"></a>
             <h1 class="mui-title">聊天室</h1>
         </header>
         <div class="chat-body" :style="{height:(curHeight-45)+'px'}">
@@ -54,8 +54,9 @@ export default{
         ele.scrollTop = ele.scrollHeight
     },
     methods:{
-        chatColse(){
+        outLink(){
             this.socket.close();
+            this.$router.back(-1);
         },
         sendData(){
             var msg = this.msg+","+this.user_name+','+this.user_img;
