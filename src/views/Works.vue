@@ -12,7 +12,7 @@
 				<img src="/icon-img/play.png" alt="" class="video-icon" :style="playStyle">
 				<ul class="works-icon">
 					<li class="icon-round">
-						<img :src="host+wDetails.user_pic" alt="" class="icon-img" @click="userLink">
+						<img :src="host+wDetails.user_pic" alt="" class="icon-img" @click="userLink($event,wDetails.uid)">
 					</li>
 					<li class="icon-cell">
 						<span class="mui-icon-extra mui-icon-extra-heart-filled icon-item like-style" @click="likeClick" :style="likeStyle" id="anms"></span>
@@ -93,7 +93,7 @@
 		<div class="works-detail">
 			<div class="detail-box">
 				<div class="box-left">
-					<router-link to="" class="router-link">
+					<router-link :to="`/youself/${wDetails.uid}`" class="router-link">
 						<img :src="host+wDetails.user_pic" class="user-img"/>
 						<span class="uname-text">@用户/ <span v-text="wDetails.user_name">名在这里展示</span></span>
 					</router-link>
@@ -174,8 +174,9 @@
 				})
 			},
 			//用户详情跳转
-			userLink(e) {
+			userLink(e,uid) {
 				e.stopPropagation();
+				this.$router.push('/youself/'+uid)
 
 			},
 			//隐藏分享
@@ -364,6 +365,7 @@
 	overflow: auto;
 	position: absolute;
 	transition: .5s;
+	bottom: -26rem;
 	z-index: 1;
 }
 .app-works .works-comment .comment{

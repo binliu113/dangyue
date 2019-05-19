@@ -11,6 +11,8 @@ import MintUi from 'mint-ui' //导入mint ui 所有组件
 import Vuex from 'vuex'
 //axios  key允许跨域
 axios.defaults.withCredentials = true
+//post上传文件
+axios.defaults.headers.post['Content-Type'] = 'multipart/form-data;charset=utf-8';
 Vue.prototype.axios = axios     //将axios添加至原型对象
 Vue.config.productionTip = false
 Vue.use(MintUi)  //引用mint ui

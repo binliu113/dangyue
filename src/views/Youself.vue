@@ -1,16 +1,9 @@
 <template lang="html">
     <div class="app-youself">
         <header id="header" class="mui-bar mui-bar-transparent">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="outLink"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-        <!-- 加载提示 -->
-        <div class="Toast" v-if="tCode" :style="tostStyle">
-            <div class="toast-box">
-                <span class="mui-spinner"></span>
-                <p>正在加载中..</p>
-            </div>
-        </div>
         <div class="login-show">
             <div class="bg-box">
                 <img :src="host+user.user_img" class="bg-img">
@@ -54,7 +47,7 @@
                     <div class="works-list">
                         <!-- 作品类表 -->
                         <div class="works-item" v-for="item of list" v-if="list.length>0">
-                            <router-link to="" class="works-link">
+                            <router-link :to="'/works/'+item.lid" class="works-link">
                                 <video :src="host+item.src" class="link-icon">
                                 </video>
                             </router-link>
@@ -84,15 +77,10 @@ export default {
     data(){
         return{
             host: this.host,
-            tCode: false,
             navCode: true,      //navbar控制
             user:{},
             count:0,
             list:[],
-            tostStyle:{
-                //加载提示
-                height: document.documentElement.clientHeight+'px'
-            }
         }
     },
     created(){
@@ -102,11 +90,15 @@ export default {
               uid:this.uid
           }
       }).then(result=>{
-          var user = result.data.user;
-          this.user = result.data.user;
-          this.count = result.data.count;
-          this.list = result.data.data;
-          this.tCode = false;
+            this.$indicator.open('加载中...');
+            var user = result.data.user;
+            this.user = result.data.user;
+            this.count = result.data.count;
+            this.list = result.data.data;
+            var time = setTimeout(()=>{
+                this.$indicator.close();
+                clearTimeout(time);
+            })
       })
     },
     methods:{
@@ -143,7 +135,7 @@ export default {
 
 <style lang="css" scoped>
 /* 提示样式 */
-.app-youself .Toast{
+/* .app-youself .Toast{
     width: 100%;
     color: #fff;
     text-align: center;
@@ -161,7 +153,7 @@ export default {
     background: rgba(0, 0, 0, .5);
     border-radius: .5rem;
     display: inline-block;
-}
+} */
 /* 主样式 */
 .app-youself .mui-bar-transparent{
     background:rgba(0,0,0,0.5);

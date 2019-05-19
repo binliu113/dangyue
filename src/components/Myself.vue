@@ -10,13 +10,6 @@
                 <input type="button" value="登录" @click="loadLogin" class="login-btn">
             </form>
         </div>
-        <!-- 加载提示 -->
-        <div class="Toast" v-if="tCode" :style="tostStyle">
-            <div class="toast-box">
-                <span class="mui-spinner"></span>
-                <p>正在加载中..</p>
-            </div>
-        </div>
         <div v-if="loginCode" class="login-show">
             <div class="bg-box">
                 <img :src="host+user.user_img" class="bg-img">
@@ -60,7 +53,7 @@
                     <div class="works-list">
                         <!-- 作品类表 -->
                         <div class="works-item" v-for="item of list">
-                            <router-link to="" class="works-link">
+                            <router-link :to="'/works/'+item.lid" class="works-link">
                                 <video :src="host+item.src" class="link-icon">
                                 </video>
                             </router-link>
@@ -84,7 +77,6 @@ export default {
     data(){
         return{
             host: this.host,
-            tCode: false,
             loginCode: false,       //登录控制
             navCode: true,      //navbar控制
             uname:'',       //input
@@ -93,11 +85,7 @@ export default {
             num:0,
             user:{},
             count:0,
-            list:[],
-            tostStyle:{
-                //加载提示
-                height: document.documentElement.clientHeight+'px'
-            }
+            list:[]
         }
     },
     created(){
@@ -135,7 +123,10 @@ export default {
                         this.user = res.data.user;
                         this.count = res.data.count;
                         this.list = res.data.data;
-                        this.tCode = false;
+                        var time = setTimeout(()=>{
+                            this.$indicator.close();
+                            clearTimeout(time);
+                        })
                     })
 
                 }
@@ -167,12 +158,12 @@ export default {
         },
         //登录
         loadLogin(){
-            this.tCode = true;
-            //var nreg = /^\d{3,8}$/
-            // if(!nreg.test(this.uname)){
-            //     this.$toast('用户名格式不正确');
-            //     return;
-            // }
+
+            var nreg = /^\w{3,8}$/
+            if(!nreg.test(this.uname)){
+                this.$toast('用户名格式不正确');
+                return;
+            }
             var preg = /^\d{3,8}$/
             if(!preg.test(this.upwd)){
                 this.$toast('密码格式不正确')
@@ -187,11 +178,16 @@ export default {
             }).then(res=>{
                 var code = res.data.code;
                 if(code!=-1){
+                    this.$indicator.open('加载中...');
                     this.$toast('登录成功');
                     var $uid = res.data.data[0].uid;
                     sessionStorage.setItem('uid',$uid);
                 }else{
                     this.$toast('用户名与密码不匹配');
+                    var time = setTimeout(()=>{
+                        this.$indicator.close();
+                        clearTimeout(time);
+                    })
                 }
             })
         },
@@ -208,7 +204,7 @@ export default {
 
 <style lang="css" scoped>
 /* 提示样式 */
-.app-myself .Toast{
+/* .app-myself .Toast{
     width: 100%;
     text-align: center;
     background-image: linear-gradient(91deg, rgb(2, 0, 49) 0px, rgb(109, 51, 83) 140%);
@@ -225,7 +221,7 @@ export default {
     background: rgba(0, 0, 0, .5);
     border-radius: .5rem;
     display: inline-block;
-}
+} */
 /* 主样式 */
 .app-myself .login-hide{
     padding: 10rem 1rem;

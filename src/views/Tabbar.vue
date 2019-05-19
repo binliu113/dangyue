@@ -51,6 +51,10 @@ export default {
     },
     methods:{
         uploadLink() {
+            if(!sessionStorage.getItem('uid')){
+                this.$toast('请先登录')
+                return;
+            }
             this.$router.push('/upload');
         },
         loadMyself(){

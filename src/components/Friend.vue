@@ -27,6 +27,7 @@
             <div class="friend-find" v-if="this.nav===2">
                 <div class="search-box">
                         <input type="text" name="kwors" class="search" placeholder="搜索好友/手机/用户名" v-model="kw">
+                        <span class="mui-icon mui-icon-search" @click="searchFriend"></span>
                 </div>
                 <ul class="find-add">
                     <li class="add-item">
@@ -111,15 +112,31 @@ export default {
             this.axios.get(url,{
                 params:{}
             }).then(res=>{
+                this.$indicator.open('加载中...');
                 if(res.data.code===-2){
+                    console.log(res.data.msg)
                     this.$toast(res.data.msg);
+                    var time = setTimeout(()=>{
+                        this.$indicator.close();
+                        clearTimeout(time);
+                    })
                     return;
                 }else if(res.data.code===-1){
+                    this.$toast(res.data.msg);
                     this.hiden=true;
+                    var time = setTimeout(()=>{
+                        this.$indicator.close();
+                        clearTimeout(time);
+                    })
                     return;
                 }else if(res.data.code===1){
+                    console.log(res.data.msg)
                     this.hiden=false;
                     this.listSearch=res.data.data;
+                    var time = setTimeout(()=>{
+                        this.$indicator.close();
+                        clearTimeout(time);
+                    })
                     return;
                 }
 
@@ -145,11 +162,6 @@ export default {
         },
         showList(){
             this.nav=1;
-        }
-    },
-    watch:{
-        kw(){
-            this.searchFriend()
         }
     }
 }
@@ -221,6 +233,13 @@ export default {
 .app-friend .list-msg{
     text-align: center;
     font-size: 16px;
+}
+.app-friend .search-box{
+    position: relative;
+}
+.app-friend .mui-icon-search{
+    position: absolute;
+    right: .5rem;
 }
 .app-friend .search-box .search{
     height: 2.2rem;
