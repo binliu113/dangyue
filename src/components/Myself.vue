@@ -77,6 +77,7 @@ export default {
     data(){
         return{
             host: this.host,
+            timer:null,
             loginCode: false,       //登录控制
             navCode: true,      //navbar控制
             uname:'',       //input
@@ -93,6 +94,7 @@ export default {
     },
     updated(){
         this.loadDetail();
+        if(this.loginCode) clearInterval(this.timer)
     },
    watch:{
        //实时监听登录状态
@@ -135,7 +137,7 @@ export default {
         },
         //监听登录状态控制
         setTime(){
-            setInterval(() => {
+            this.timer = setInterval(() => {
                 if(this.code < 0){
                     this.code++;
                 }else{

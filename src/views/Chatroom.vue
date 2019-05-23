@@ -7,10 +7,10 @@
         <div class="chat-body" :style="{height:(curHeight-45)+'px'}">
             <div class="chat-box" v-for="(item,i) of msgArr">
                 <ul class="chat-user">
-                    <li class="user-img-box" :class="item.user_img==user_img? 'right' : 'left' ">
+                    <li class="user-img-box" :class="item.uid==user_id? 'right' : 'left' ">
                         <img :src="host+item.user_img" alt="" class="user-img">
                     </li>
-                    <li class="user-name" :class="item.user_img==user_img? 'right' : 'left' ">
+                    <li class="user-name" :class="item.uid==user_id? 'right' : 'left' ">
                         <h4 v-text="item.user_name"></h4>
                     </li>
                 </ul>
@@ -43,7 +43,8 @@ export default{
             socket:null,
             arr:'',
             user_name:sessionStorage.getItem('user_name'),
-            user_img:sessionStorage.getItem('user_img')
+            user_img:sessionStorage.getItem('user_img'),
+            user_id: sessionStorage.getItem('uid')
         }
     },
     created(){
@@ -59,7 +60,7 @@ export default{
             this.$router.back(-1);
         },
         sendData(){
-            var msg = this.msg+","+this.user_name+','+this.user_img;
+            var msg = this.user_id+','+this.msg+","+this.user_name+','+this.user_img;
             this.socket.send(msg);
             this.msg="";
         },
@@ -67,8 +68,8 @@ export default{
             var str='';
             this.socket = new WebSocket(`${this.ws}`);
             this.socket.onmessage = (e)=>{
-                this.obj = JSON.parse(e.data);//获取服务器发来的数据,并且转换为对象
-                this.msgArr.push(this.obj); //将单条记录的对象push进数组
+                this.obj = JSON.parse(e.data).data//获取服务器发来的数据,并且转换为对象
+                this.msgArr = (this.obj); //将单条记录的对象push进数组
             }
         }
     }
