@@ -109,7 +109,7 @@ export default {
             }
             var index = this.$refs.file.files[0].type.indexOf('video')
             var size  = this.$refs.file.files[0].size;
-            if(index==1){
+            if(index==-1){
                 this.$toast('请上传正确格式')
                 return;
             }
