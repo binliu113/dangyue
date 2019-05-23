@@ -10,7 +10,7 @@
                 <input type="button" value="登录" @click="loadLogin" class="login-btn">
             </form>
         </div>
-        <div v-if="loginCode" class="login-show">
+        <div v-if="loginCode && user" class="login-show" >
             <div class="bg-box">
                 <img :src="host+user.user_img" class="bg-img">
             </div>
@@ -52,7 +52,7 @@
                 <div class="list-works" v-show="navCode">
                     <div class="works-list">
                         <!-- 作品类表 -->
-                        <div class="works-item" v-for="item of list">
+                        <div class="works-item" v-for="item of list" v-if="list.length>0">
                             <router-link :to="'/works/'+item.lid" class="works-link">
                                 <video :src="host+item.src" class="link-icon">
                                 </video>

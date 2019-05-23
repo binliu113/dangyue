@@ -1,5 +1,5 @@
 <template lang="html">
-	<div class="app-works">
+	<div class="app-works" v-if="wDetails">
 		<header id="header" class="mui-bar mui-bar-transparent">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="outLink"></a>
 			<h1 class="mui-title"></h1>
@@ -34,15 +34,22 @@
 				<div class="comment">
 					<nav class="nav-bar">
 						<table></table>
-						<h5 class="nav-title">65 条评论</h5>
+						<h5 class="nav-title">{{cmtCount}}条评论</h5>
 						<span class="mui-icon mui-icon-arrowdown nav-icon" @click="hidenAndPlay"></span>
 					</nav>
-					<div>
-						<div class="" style="text-align: center;">
-							<h3>该功能未开放，敬请期待...</h3>
-						</div>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-					</div>
+					<ul class="cmt-content">
+						<li class="content-item" v-if="cmtList.length>0" v-for="item of cmtList">
+							<img :src="host+item.user_img" alt="" class="content-img">
+							<div class="width-75">
+								<p class="content-name">@{{item.user_name}}</p>
+								<span class="z-content" v-text="item.content"></span>
+							</div>
+						</li>
+					</ul>
+					<nav class="comt-input">
+						<input type="text" class="input-size" v-model="cmtContent">
+						<button type="button" class="btn-size" @click="cmtSend">@评论</button>
+					</nav>
 				</div>
 			</div>
 		</div>
@@ -113,6 +120,9 @@
 		data(){
 			return{
 				host: this.host,
+				cmtList:[],
+				cmtCount:0,
+				cmtContent: '',
 				wDetails:{},   //接受详情数据对象
 				boxRightStyle: {
 					transform: true,
@@ -146,8 +156,33 @@
 		created(){
 			this.videobg.height = this.curHeight+'px';
 			this.loadData();
+			this.loadComment();
 		},
 		methods:{
+			cmtSend() {
+				if(!this.cmtContent) return;
+				var url = this.host+'user/insetcmt?lid='+this.lid+'&content='+this.cmtContent;
+				this.axios.get(url,{
+					params: {}
+				}).then((result)=>{
+					this.cmtContent = '';
+					if(result.data.code==-2) this.$toast('您未登录');
+					if(result.data.code==-1) this.$toast('评论失败');
+					if(result.data.code==1){
+						this.$toast('评论成功');
+						this.loadComment()
+					}
+				})
+			},
+			loadComment() {
+				var url = this.host+'user/comment?lid='+this.lid
+				this.axios.get(url,{
+					params: {}
+				}).then((result)=>{
+					this.cmtList = result.data.data;
+					this.cmtCount = result.data.count;
+				})
+			},
 			outLink() {
 				this.$router.back(-1);
 			},
@@ -378,6 +413,24 @@
 	position:sticky;
 	top: 0;
 }
+.app-works .works-comment .comt-input{
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	position:fixed;
+	bottom: 0;
+}
+.app-works .works-comment .input-size{
+	width: 80%;
+	padding: .1rem;
+	padding: 0 .5rem;
+	margin: 0;
+	color: #000;
+}
+.app-works .works-comment .btn-size{
+	width: 20%;
+	background: #13b9ce;
+}
 .app-works .nav-title,
 .app-works .nav-icon{
 	color: #000;
@@ -391,6 +444,33 @@
 	font-size: 20px;
 	position: absolute;
 	right:1rem;
+}
+.app-works .cmt-content{
+	padding:0;
+	margin:0;
+	padding-bottom: 2rem;
+}
+.app-works .cmt-content .content-img{
+	width: 3rem;
+	height: 3rem;
+	margin: 0 .5rem;
+	border-radius: 50%;
+}
+.app-works .cmt-content .content-item{
+	display: flex;
+	justify-content: flex-start;
+	margin-bottom: 1rem;
+}
+.app-works .cmt-content .width-75{
+	width:75%;
+}
+.app-works .cmt-content .content-name{
+	color: #000;
+	font-size: 15px;
+	margin:0;
+}
+.app-works .cmt-content .z-content{
+	font-size: 14px;
 }
 .app-works .works-Forward{
 	width: 100%;

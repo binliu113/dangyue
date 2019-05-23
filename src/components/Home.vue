@@ -37,7 +37,7 @@
                         </div>
                         <div class="mui-media-body">购物</div></router-link></li>
             </ul>
-            <div class="app-worksList">
+            <div class="app-worksList" v-if="worksList.length>0">
         		<div class="app-list d-flex flex-wrap row">
         			<div class="col-6">
         				<div class="item" v-for="(cell,i) of worksList" :kye="i" v-if="i%2==0">
