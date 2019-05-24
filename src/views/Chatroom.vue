@@ -48,6 +48,7 @@ export default{
         }
     },
     created(){
+        //载入连接
         this.acceptData()
     },
     updated(){
@@ -56,7 +57,7 @@ export default{
     },
     methods:{
         outLink(){
-            this.socket.close();
+            this.socket.close();   //断开ws服务器
             this.$router.back(-1);
         },
         sendData(){
@@ -66,7 +67,7 @@ export default{
         },
         acceptData(){  //接受数据
             var str='';
-            this.socket = new WebSocket(`${this.ws}`);
+            this.socket = new WebSocket(`${this.ws}`);   //连接ws服务器&接收
             this.socket.onmessage = (e)=>{
                 this.obj = JSON.parse(e.data).data//获取服务器发来的数据,并且转换为对象
                 this.msgArr = (this.obj); //将单条记录的对象push进数组
