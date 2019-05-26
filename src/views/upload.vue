@@ -95,8 +95,12 @@ export default {
             params.append('kind',this.value);
             this.axios.post(url,params).then((result)=>{
                 if(result.data.code==1){
+                    this.$indicator.open('加载中...');
                     this.$toast('上传成功')
-                    sessionStorage.setItem('tabbarCode',1);
+                    var time = setTimeout(()=>{
+                        this.$indicator.close();
+                        clearTimeout(time);
+                    })
                     this.$router.back(0);
                 }else{
                     this.$toast('上传失败')

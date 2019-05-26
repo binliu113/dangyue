@@ -6,7 +6,7 @@
 		</header>
 		<div class="works-body" :style="{height:(curHeight)+'px'}" @click="hidenAndPlay">
 			<div class="video-box" :style="videobg">
-				<div>
+				<div >
 					<video :src="host+wDetails.src" class="video" loop></video>
 				</div>
 				<img src="/icon-img/play.png" alt="" class="video-icon" :style="playStyle">
@@ -201,11 +201,16 @@
 			},
 			//作品初始数据
 			loadData() {
+				this.$indicator.open('努力呈现中...');
 				var url = this.host+'worksList/details';
 				this.axios.get(url,{
 					params: { lid: this.lid }
 				}).then((result)=>{
 					this.wDetails = result.data.data[0];
+					var time = setTimeout(()=>{
+                        this.$indicator.close();
+                        clearTimeout(time);
+                    })
 				})
 			},
 			//用户详情跳转
@@ -374,6 +379,7 @@
 }
 .app-works .works-icon .icon-round .icon-img{
 	width: 100%;
+	height: 100%;
 	border-radius: 50%;
 }
 .app-works .works-icon .icon-item{

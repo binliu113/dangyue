@@ -107,28 +107,11 @@ export default{
              this.$indicator.close();
              clearTimeout(time);
          },100)
-         this.stateBottom();
     },
     methods:{
         loadBottom() {
             this.loading()
             this.allLoaded = true
-        },
-        stateBottom() {
-            let that = this;
-            window.onscroll = ()=>{
-                // scrollTop 滚动条滚动时，距离顶部的距离
-                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-                // windowHeight 可视区的高度
-                var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
-                // scrollHeight 滚动条的总高度
-                var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-                // 滚动条到底部的条件
-                if(scrollTop + windowHeight == scrollHeight){
-                // 加载数据
-                    this.allLoaded = false;
-                }
-            }
         },
         loading(){
             if(this.move==false){
@@ -143,9 +126,6 @@ export default{
             }).then(res=>{
                 var rows = this.worksList.concat(res.data.data);
                 this.worksList=rows;
-                if(this.pno==res.data.pageCount){
-                    this.move=false;
-                }
             })
         },
         toWorks(e){

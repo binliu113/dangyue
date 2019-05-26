@@ -50,16 +50,30 @@
             </div>
             <div class="list-content">
                 <div class="list-works" v-show="navCode">
-                    <div class="works-list">
+                    <div class="works-list row m-0">
                         <!-- 作品类表 -->
-                        <div class="works-item" v-for="item of list" v-if="list.length>0">
-                            <router-link :to="'/works/'+item.lid" class="works-link">
-                                <video :src="host+item.src" class="link-icon">
-                                </video>
-                            </router-link>
-                            <div class="works-icon">
-                                <span class="mui-icon-extra mui-icon-extra-heart-filled"></span>
-                                <span>{{item.like_num}}赞</span>
+                        <div class="col-6 p-0 borders-right">
+                            <div class="works-item" v-for="(item,i) of list" v-if="list.length>0 && i%2==0">
+                                <router-link :to="'/works/'+item.lid" class="works-link">
+                                    <video :src="host+item.src" class="link-icon">
+                                    </video>
+                                </router-link>
+                                <div class="works-icon">
+                                    <span class="mui-icon-extra mui-icon-extra-heart-filled"></span>
+                                    <span>{{item.like_num}}赞</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 p-0 borders-left">
+                            <div class="works-item" v-for="(item,i) of list" v-if="list.length>0 && i%2!==0">
+                                <router-link :to="'/works/'+item.lid" class="works-link">
+                                    <video :src="host+item.src" class="link-icon">
+                                    </video>
+                                </router-link>
+                                <div class="works-icon">
+                                    <span class="mui-icon-extra mui-icon-extra-heart-filled"></span>
+                                    <span>{{item.like_num}}赞</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -160,7 +174,6 @@ export default {
         },
         //登录
         loadLogin(){
-
             var nreg = /^\w{3,8}$/
             if(!nreg.test(this.uname)){
                 this.$toast('用户名格式不正确');
@@ -180,8 +193,8 @@ export default {
             }).then(res=>{
                 var code = res.data.code;
                 if(code!=-1){
-                    this.$indicator.open('加载中...');
                     this.$toast('登录成功');
+                    this.$indicator.open('加载中...');
                     var $uid = res.data.data[0].uid;
                     sessionStorage.setItem('uid',$uid);
                 }else{
@@ -205,26 +218,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-/* 提示样式 */
-/* .app-myself .Toast{
-    width: 100%;
-    text-align: center;
-    background-image: linear-gradient(91deg, rgb(2, 0, 49) 0px, rgb(109, 51, 83) 140%);
-    justify-content: center;
-    flex-direction: column;
-    display: flex;
-    position: fixed;
-    top: 0;
-}
-.app-myself .toast-box{
-    padding-top: 1rem;
-    margin: 0 auto;
-    width: 10rem;
-    background: rgba(0, 0, 0, .5);
-    border-radius: .5rem;
-    display: inline-block;
-} */
-/* 主样式 */
 .app-myself .login-hide{
     padding: 10rem 1rem;
     text-align: center;
@@ -264,7 +257,7 @@ export default {
 }
 .app-myself .my-details .my-img{
     width: 7rem;
-    height: 100%;
+    height: 7rem;
     border: .2rem solid rgba(0, 0, 0, .5);
     border-radius: 50%;
 }
@@ -331,9 +324,14 @@ export default {
     flex-wrap: wrap;
     justify-content: space-around;
 }
+.app-myself  .list-content .borders-right,
+.app-myself  .list-content .borders-left{
+    border-left: .05rem solid transparent;
+    border-right: .05rem solid transparent;
+}
 .list-content .works-list .works-item{
-    width: 49.5%;
-    height: 12rem;
+    width: 100%;
+    height: auto;
     background: #000;
     margin-bottom: .1rem;
     display: flex;

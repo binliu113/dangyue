@@ -68,7 +68,7 @@
 			var time = setTimeout(()=>{
                 this.$indicator.close();
                 clearTimeout(time);
-            },100)
+            })
 		},
 		methods:{
 			loadBottom() {

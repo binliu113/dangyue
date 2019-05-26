@@ -4,7 +4,7 @@
         <h1 class="mui-title">消息</h1>
         </header>
         <div class="msg-body">
-            <ul class="list">
+            <ul class="list" @click="handleClick">
                 <li class="list-item">
                     <div class="icon-box bg-f">
                         <span class="mui-icon-extra mui-icon-extra-peoples"></span>
@@ -60,9 +60,12 @@ export default{
         }
     },
     methods:{
+        handleClick() {
+            this.$toast('暂无该功能')
+        },
         jumpChat(){
             var s = sessionStorage.getItem('uid');
-            if(!s) return this.$toast('不登录还想撩小姐姐/小哥哥'); 
+            if(!s) return this.$toast('不登录还想撩小姐姐/小哥哥');
             this.$router.push('/chatroom')
         }
     }
